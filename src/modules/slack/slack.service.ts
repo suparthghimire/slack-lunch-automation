@@ -55,20 +55,12 @@ export const SlackService = {
     if (!lastMsgByBot) return null;
 
     const blocks = lastMsgByBot.blocks
-      ?.filter((block) => block.type === "section")
-      .map((bl) => {
-        if ("text" in bl) return bl.text;
-      })
-      .filter((item) => {
-        return item && item.text && item.text.includes("×");
-      })
-      .map((item) => {
-        if (item) {
-          const itemTxt = item.text?.split("\n")[0];
-          const textBetnTwoStars = itemTxt?.split("*")[1];
-
-          return textBetnTwoStars;
-        }
+      ?.filter(
+        (block) => block.type === "section" && block.text?.text?.includes("×")
+      )
+      .map((block) => {
+        const itemText = block.text?.text?.split("\n")[0];
+        return itemText?.split("*")[1];
       })
       .filter(Boolean) as string[];
 
