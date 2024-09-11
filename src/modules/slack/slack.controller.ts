@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { SlackService } from "./slack.service";
-import { messageHistory } from "./data";
 import { env } from "@/lib/env";
 
 export const SlackController = {
@@ -32,8 +31,6 @@ export const SlackController = {
 
     const response = await SlackService.getAllOpenLunches(body.channel_id);
     const itemList = SlackService.processLunchData(response) ?? [];
-
-    console.log({ itemList: itemList });
 
     const responseMessage = {
       response_type: "in_channel", // This makes the message visible to everyone in the channel

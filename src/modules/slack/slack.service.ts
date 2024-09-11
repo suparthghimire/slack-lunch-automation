@@ -6,7 +6,6 @@ const slackClient = new WebClient(env.slackToken);
 
 export const SlackService = {
   getAllOpenLunches: async (channelId: string) => {
-    console.log({ st: env.slackToken });
     const response = await slackClient.conversations.history({
       channel: channelId,
     });
