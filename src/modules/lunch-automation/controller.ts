@@ -28,10 +28,12 @@ export const LunchController = {
     );
     const itemList = LunchService.processLunchData(response) ?? [];
 
-    await WhatsappService.sendMessage(
+    const msg = await WhatsappService.sendMessage(
       env.sendTo,
       `Lunch Order from Naamche \n ${itemList.join("\n")}`
     );
+
+    console.log({ msg });
 
     const responseMessage = {
       response_type: "in_channel", // This makes the message visible to everyone in the channel
