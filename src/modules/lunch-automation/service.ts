@@ -52,7 +52,7 @@ export const LunchService = {
       });
     });
 
-    return Object.values(itemMap).map((item) => `${item.label} × ${item.qty}`);
+    return Object.values(itemMap).map((item) => `${item.qty} × ${item.label}`);
   },
 
   processLunchData: (response: ConversationsHistoryResponse) => {
