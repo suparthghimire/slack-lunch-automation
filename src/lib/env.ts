@@ -5,4 +5,5 @@ export const env = {
   port: process.env.PORT || 5600,
   slackToken: process.env.SLACK_TOKEN || "",
   wassengerToken: process.env.WASSENGER_TOKEN,
+  sendTo: process.env.SEND_TO ?? "",
 };

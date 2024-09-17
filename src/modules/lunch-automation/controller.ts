@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { LunchService } from "./service";
 import { WhatsappService } from "../whatsapp/service";
+import { env } from "@/lib/env";
 
 export const LunchController = {
   aggregateAndSendLunchOrder: async (req: Request, res: Response) => {
@@ -27,12 +28,8 @@ export const LunchController = {
     );
     const itemList = LunchService.processLunchData(response) ?? [];
 
-    const phNo = "+9779818732481";
-
-    console.log({ itemList });
-
     await WhatsappService.sendMessage(
-      phNo,
+      env.sendTo,
       `Lunch Order from Naamche \n ${itemList.join("\n")}`
     );
 
