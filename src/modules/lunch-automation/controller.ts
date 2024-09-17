@@ -28,9 +28,13 @@ export const LunchController = {
     );
     const itemList = LunchService.processLunchData(response) ?? [];
 
+    const date = new Intl.DateTimeFormat("en-GB", {
+      dateStyle: "medium",
+    }).format(new Date());
+
     const msg = await WhatsappService.sendMessage(
       env.sendTo,
-      `Lunch Order from Naamche \n ${itemList.join("\n")}`
+      `Lunch Order from Naamche for ${date} \n ${itemList.join("\n")}`
     );
 
     console.log({ msg });
