@@ -46,7 +46,7 @@ export const LunchController = {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: "*Lunch Order Sent* 📞 🍔 \nYour order has been successfully sent to the restaurant!",
+            text: `*Lunch Order for ${date} Sent* 📞 🍔 \nYour order has been successfully sent to the restaurant!`,
           },
         },
         {
