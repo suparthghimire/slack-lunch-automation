@@ -1,8 +1,8 @@
-import { SlackRouter } from "@/modules/slack/slack.routes";
+import { LunchRouter } from "@/modules/lunch-automation/route";
 import { Router } from "express";
 
 const router = Router();
 
-router.use("/slack", SlackRouter);
+router.use("/lunch", LunchRouter);
 
 export { router };

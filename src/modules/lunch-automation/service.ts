@@ -1,11 +1,11 @@
 import { ConversationsHistoryResponse, WebClient } from "@slack/web-api";
 import { env } from "@/lib/env";
 import { DescriptionElement } from "@slack/web-api/dist/types/response/ChatPostMessageResponse";
-
+import fs from "fs";
 const slackClient = new WebClient(env.slackToken);
 
-export const SlackService = {
-  getAllOpenLunches: async (channelId: string) => {
+export const LunchService = {
+  getAllOpenLunchesSentByLunchBot: async (channelId: string) => {
     const response = await slackClient.conversations.history({
       channel: channelId,
     });
@@ -28,7 +28,7 @@ export const SlackService = {
 
       individualItems.forEach((item) => {
         const qtyNum = parseInt(qty, 10);
-        const normalizedItem = SlackService.normalizeWords(item);
+        const normalizedItem = LunchService.normalizeWords(item);
         if (itemMap[normalizedItem]) {
           itemMap[normalizedItem] += qtyNum;
         } else {
@@ -47,12 +47,25 @@ export const SlackService = {
 
   processLunchData: (response: ConversationsHistoryResponse) => {
     const messages = response.messages ?? [];
+    const messagesByBot = messages
+      .filter(
+        (msg) => msg.bot_id === env.lunchBotId && msg.subtype !== "bot_message"
+      )
+      .slice(0, 3);
+    // save to json file
+    fs.writeFileSync("messages.json", JSON.stringify(messagesByBot));
 
-    const lastMsgByBot = messages
+    console.log({ messages: JSON.stringify(messagesByBot) });
+
+    const lastMsgByBot = messagesByBot
       .filter((msg) => msg.bot_id === env.lunchBotId)
-      .at(0);
+      .find((msg) => {
+        return msg.text?.toLowerCase()?.includes("paid by") === false;
+      });
 
     if (!lastMsgByBot) return null;
+
+    console.log({ lastMsgByBot: JSON.stringify(lastMsgByBot) });
 
     const blocks = lastMsgByBot.blocks
       ?.filter(
@@ -64,6 +77,6 @@ export const SlackService = {
       })
       .filter(Boolean) as string[];
 
-    return SlackService.aggregateLunchOrders(blocks);
+    return LunchService.aggregateLunchOrders(blocks);
   },
 };

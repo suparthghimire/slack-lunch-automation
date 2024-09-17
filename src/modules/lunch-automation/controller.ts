@@ -1,16 +1,9 @@
 import { Request, Response } from "express";
-import { SlackService } from "./slack.service";
-import { env } from "@/lib/env";
+import { LunchService } from "./service";
+import { WhatsappService } from "../whatsapp/service";
 
-export const SlackController = {
-  health: (req: Request, res: Response) => {
-    return res.status(200).json({
-      status: "ok",
-      message: "Slack is up and running",
-    });
-  },
-
-  getLunchData: async (req: Request, res: Response) => {
+export const LunchController = {
+  aggregateAndSendLunchOrder: async (req: Request, res: Response) => {
     type SlackResponse = {
       token: string;
       team_id: string;
@@ -29,8 +22,19 @@ export const SlackController = {
 
     const body: SlackResponse = req.body;
 
-    const response = await SlackService.getAllOpenLunches(body.channel_id);
-    const itemList = SlackService.processLunchData(response) ?? [];
+    const response = await LunchService.getAllOpenLunchesSentByLunchBot(
+      body.channel_id
+    );
+    const itemList = LunchService.processLunchData(response) ?? [];
+
+    const phNo = "+9779818732481";
+
+    console.log({ itemList });
+
+    await WhatsappService.sendMessage(
+      phNo,
+      `Lunch Order from Naamche \n ${itemList.join("\n")}`
+    );
 
     const responseMessage = {
       response_type: "in_channel", // This makes the message visible to everyone in the channel

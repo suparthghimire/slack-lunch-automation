@@ -1,26 +1,27 @@
 {
-	"name": "ts-template",
-	"version": "1.0.0",
-	"description": "A template that generates boilerplate to build ts with tsup and uses pnpm as package manager",
-	"license": "MIT",
-	"scripts": {
-		"dev": "tsup --watch --onSuccess 'pnpm start'",
-		"type-check": "tsc --noEmit -p .",
-		"build-only": "tsup",
-		"build": "pnpm type-check && pnpm build-only",
-		"start": "node dist/index.js"
-	},
-	"devDependencies": {
-		"@types/cors": "^2.8.17",
-		"@types/express": "^4.17.21",
-		"@types/node": "^20.12.7",
-		"tsup": "^8.0.2",
-		"typescript": "^5.4.5"
-	},
-	"dependencies": {
-		"@slack/web-api": "^7.4.0",
-		"cors": "^2.8.5",
-		"dotenv": "^16.4.5",
-		"express": "^4.20.0"
-	}
+  "name": "ts-template",
+  "version": "1.0.0",
+  "description": "A template that generates boilerplate to build ts with tsup and uses pnpm as package manager",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsup --watch --onSuccess 'pnpm start'",
+    "type-check": "tsc --noEmit -p .",
+    "build-only": "tsup",
+    "build": "pnpm type-check && pnpm build-only",
+    "start": "node dist/index.js"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@slack/web-api": "^7.4.0",
+    "axios": "^1.7.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.20.0"
+  }
 }
