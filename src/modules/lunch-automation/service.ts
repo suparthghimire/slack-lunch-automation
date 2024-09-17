@@ -18,31 +18,41 @@ export const LunchService = {
   },
 
   aggregateLunchOrders: (orders: string[]) => {
-    const itemMap: Record<string, number> = {};
+    const itemMap: Record<
+      string,
+      {
+        label: string;
+        qty: number;
+      }
+    > = {};
 
-    orders.forEach((item) => {
-      const [qty, combinedItems] = item.split("×").map((item) => item.trim());
+    orders.forEach((order) => {
+      const [qty, combinedItems] = order.split("×").map((item) => item.trim());
       const individualItems = combinedItems
         .split("+")
         .map((item) => item.trim());
+      const qtyNum = Number(qty);
+      // Remove price bracket using regex
+      const cleanedItems = individualItems.map((item) =>
+        item.replace(/\(\$.*?\)/g, "").trim()
+      );
 
-      individualItems.forEach((item) => {
-        const qtyNum = parseInt(qty, 10);
-        const normalizedItem = LunchService.normalizeWords(item);
-        if (itemMap[normalizedItem]) {
-          itemMap[normalizedItem] += qtyNum;
-        } else {
-          itemMap[normalizedItem] = qtyNum;
-        }
+      cleanedItems.forEach((item) => {
+        const tokenizedItem = LunchService.normalizeWords(item);
+        if (itemMap[tokenizedItem]) {
+          itemMap[tokenizedItem] = {
+            ...itemMap[tokenizedItem],
+            qty: itemMap[tokenizedItem].qty + qtyNum,
+          };
+        } else
+          itemMap[tokenizedItem] = {
+            label: item,
+            qty: qtyNum,
+          };
       });
     });
 
-    const result: string[] = [];
-    for (const [item, qty] of Object.entries(itemMap)) {
-      result.push(`${qty} × ${item}`);
-    }
-
-    return result;
+    return Object.values(itemMap).map((item) => `${item.label} × ${item.qty}`);
   },
 
   processLunchData: (response: ConversationsHistoryResponse) => {
