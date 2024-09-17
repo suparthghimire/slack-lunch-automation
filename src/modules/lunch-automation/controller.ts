@@ -32,12 +32,12 @@ export const LunchController = {
       dateStyle: "medium",
     }).format(new Date());
 
-    const msg = await WhatsappService.sendMessage(
-      env.sendTo,
-      `Lunch Order from Naamche for ${date} \n ${itemList.join("\n")}`
-    );
-
-    console.log({ msg });
+    if (!env.whatsappDisabled) {
+      await WhatsappService.sendMessage(
+        env.sendTo,
+        `Lunch Order from Naamche for ${date} \n ${itemList.join("\n")}`
+      );
+    }
 
     const responseMessage = {
       response_type: "in_channel", // This makes the message visible to everyone in the channel
@@ -46,7 +46,13 @@ export const LunchController = {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `*Lunch Order for ${date} Sent* 📞 🍔 \nYour order has been successfully sent to the restaurant!`,
+            text: `*Lunch Order for ${date} ${
+              !env.whatsappDisabled ? "Sent" : ""
+            }* 🍔 \n${
+              env.whatsappDisabled
+                ? "Copy this message and send it to the restaurant!"
+                : "Your order has been successfully sent to the restaurant!"
+            }`,
           },
         },
         {
