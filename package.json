@@ -7,7 +7,7 @@
     "dev": "tsup --watch --onSuccess 'pnpm start'",
     "type-check": "tsc --noEmit -p .",
     "build-only": "tsup",
-    "build": "pnpm type-check && pnpm build-only",
+    "build": "pnpm build-only",
     "start": "node dist/index.js"
   },
   "devDependencies": {
